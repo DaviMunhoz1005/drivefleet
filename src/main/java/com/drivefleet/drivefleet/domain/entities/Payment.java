@@ -1,5 +1,6 @@
 package com.drivefleet.drivefleet.domain.entities;
 
+import com.drivefleet.drivefleet.domain.enums.PaymentMethod;
 import com.drivefleet.drivefleet.domain.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,18 +23,21 @@ public class Payment {
     @Column(columnDefinition = "CHAR(36)")
     private UUID id;
 
+    @Column(nullable = true)
     private LocalDate dataPagamento;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal value;
 
-    private String method; // (PIX, CARTAO, BOLETO)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private PaymentMethod method;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentStatus status;
 
     @OneToOne
-    @JoinColumn(name = "saler_order_id", unique = true)
+    @JoinColumn(name = "sales_order_id", unique = true, nullable = false)
     private SalesOrder salesOrder;
 }
