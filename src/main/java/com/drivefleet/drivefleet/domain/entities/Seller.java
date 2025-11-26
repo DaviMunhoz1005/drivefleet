@@ -20,9 +20,10 @@ public class Seller {
     private UUID id;
 
     @OneToOne(optional = false)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", unique = true)
     private User user;
 
     @Column(nullable = false, unique = true)
     private Long registrationNumber;
 }
+

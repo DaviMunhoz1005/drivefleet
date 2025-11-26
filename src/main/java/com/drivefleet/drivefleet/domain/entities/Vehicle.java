@@ -39,10 +39,10 @@ public class Vehicle {
     @Column(nullable = false)
     private String color;
 
-    @Column(nullable = false)
-    private Double mileage;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal mileage;
 
-    @Column(nullable = false, precision = 8, scale = 2)
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal value;
 
     @Enumerated(EnumType.STRING)

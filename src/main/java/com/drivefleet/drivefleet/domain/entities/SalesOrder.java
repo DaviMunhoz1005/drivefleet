@@ -46,6 +46,9 @@ public class SalesOrder {
     @JoinColumn(name = "vehicle_id", unique = true)
     private Vehicle vehicle;
 
+    @OneToOne(mappedBy = "salesOrder", cascade = CascadeType.ALL)
+    private Payment payment;
+
     @PrePersist
     public void prePersist() {
         this.creationDate = LocalDate.now();
@@ -54,4 +57,3 @@ public class SalesOrder {
         }
     }
 }
-

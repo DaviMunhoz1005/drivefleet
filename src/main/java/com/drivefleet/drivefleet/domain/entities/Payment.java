@@ -23,14 +23,13 @@ public class Payment {
     @Column(columnDefinition = "CHAR(36)")
     private UUID id;
 
-    @Column(nullable = true)
-    private LocalDate dataPagamento;
+    private LocalDate paymentDate;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal value;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
+    @Column(nullable = false)
     private PaymentMethod method;
 
     @Enumerated(EnumType.STRING)
