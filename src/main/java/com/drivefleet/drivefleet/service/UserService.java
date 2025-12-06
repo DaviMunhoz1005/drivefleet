@@ -4,14 +4,14 @@ import com.drivefleet.drivefleet.domain.dto.UserRequest;
 import com.drivefleet.drivefleet.domain.dto.UserResponse;
 import com.drivefleet.drivefleet.domain.entities.User;
 import com.drivefleet.drivefleet.exceptions.EmailAlreadyInUseException;
-import com.drivefleet.drivefleet.exceptions.UserNotFoundException;
+import com.drivefleet.drivefleet.exceptions.UserNotFoundEmailException;
+import com.drivefleet.drivefleet.exceptions.UserNotFoundIdException;
 import com.drivefleet.drivefleet.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -50,7 +50,7 @@ public class UserService {
     @Transactional
     public UserResponse update(UUID id, UserRequest request) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id.toString()));
+                .orElseThrow(() -> new UserNotFoundIdException(id.toString()));
 
         user.setName(request.name());
 
@@ -67,10 +67,20 @@ public class UserService {
     @Transactional
     public void deleteById(UUID id) {
         if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException(id.toString());
+            throw new UserNotFoundIdException(id.toString());
         }
 
         userRepository.deleteById(id);
+    }
+
+    public UserResponse findById(UUID id) {
+        return convertToResponse(userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundIdException(id.toString())));
+    }
+
+    public UserResponse findByEmail(String email) {
+        return convertToResponse(userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundEmailException(email)));
     }
 }
 
