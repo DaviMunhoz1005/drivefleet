@@ -1,6 +1,7 @@
 package com.drivefleet.drivefleet.domain.entities;
 
 import com.drivefleet.drivefleet.domain.enums.UserRole;
+import com.drivefleet.drivefleet.domain.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,4 +33,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole role;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserStatus status;
 }
