@@ -2,6 +2,7 @@ package com.drivefleet.drivefleet.service;
 
 import com.drivefleet.drivefleet.domain.dto.seller.SellerRequest;
 import com.drivefleet.drivefleet.domain.dto.seller.SellerResponse;
+import com.drivefleet.drivefleet.domain.dto.user.UserResponse;
 import com.drivefleet.drivefleet.domain.entities.Seller;
 import com.drivefleet.drivefleet.domain.entities.User;
 import com.drivefleet.drivefleet.domain.enums.UserStatus;
@@ -37,12 +38,23 @@ public class SellerService {
 
     @Transactional
     public void deleteById(UUID id) {
-        Seller seller = sellerRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundIdException(id.toString()));
+        Seller seller = ensureExists(id);
         if (!seller.getSales().isEmpty()) {
             throw new SellerCannotBeExcludedException(id.toString());
         }
         seller.getUser().setStatus(UserStatus.EXCLUDED);
+    }
+
+    @Transactional
+    public SellerResponse update(UUID id, SellerRequest request) {
+        Seller seller = ensureExists(id);
+        userService.update(seller.getUser().getId(), request.user());
+        return convertToResponse(seller);
+    }
+
+    private Seller ensureExists(UUID id) {
+        return sellerRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundIdException(id.toString()));
     }
 
     private SellerResponse convertToResponse(Seller seller) {
