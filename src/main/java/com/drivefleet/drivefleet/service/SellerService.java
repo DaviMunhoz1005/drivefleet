@@ -50,7 +50,7 @@ public class SellerService {
         if (!seller.getSales().isEmpty()) {
             throw new SellerCannotBeExcludedException(id.toString());
         }
-        seller.getUser().setStatus(UserStatus.EXCLUDED);
+        userService.deleteById(seller.getUser().getId());
     }
 
     @Transactional
