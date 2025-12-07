@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -24,6 +25,13 @@ public class SellerService {
     private final SellerRepository sellerRepository;
     private final UserService userService;
     private final SalesOrderService salesOrderService;
+
+    public List<SellerResponse> listAllSellers() {
+        return sellerRepository.findAllActive(UserStatus.ACTIVE)
+                .stream()
+                .map(this::convertToResponse)
+                .toList();
+    }
 
     public SellerResponse create(SellerRequest request) {
         User user = userService.create(request.user());
